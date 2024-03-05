@@ -3,37 +3,38 @@ import matplotlib.pyplot as plt
 
 def horizontal_header(data):
     print(" \t", end="")
-    for i in range(len(data)):
-        print(chr(65+i), end="\t")
+    for node in data.keys():
+        print(node, end="\t")
     print()
 
 def generateGraph(data):
     horizontal_header(data)
-    for i in range(len(data)):
-        print(chr(65+i), end="\t")
-        for j in range(len(data)):
-            print(chr(65+i) if chr(65+j) in data[i][chr(65+i)] else "*", end="\t")
+    for node in data.keys():
+        print(node, end="\t")
+        for node2 in data.keys():
+            found = "*"
+            for neighbor in data[node]:
+                if neighbor == node2:
+                    found = neighbor
+            print(found, end="\t")
         print()
-        
+
+
 def drawGraph(data, directed=False):
     G = nx.Graph()
     if directed:
         G = nx.DiGraph()
-        
-    for i in range(len(data)):
-        G.add_node(chr(65+i))
-        for j in range(len(data)):
-            if chr(65+j) in data[i][chr(65+i)]:
-                G.add_edge(chr(65+i), chr(65+j))
 
-                
+    for node in data.keys():
+        G.add_node(node)
+        for neighbor in data[node]:
+            G.add_edge(node, neighbor)
+
     pos = nx.spring_layout(G)
-    
-    # Draw the graph with proper arrowstyle for directed graphs
+
     if directed:
         nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=True, arrowstyle='-|>')
     else:
         nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=False)
-    
-    plt.show()
 
+    plt.show()
