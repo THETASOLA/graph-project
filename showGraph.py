@@ -24,12 +24,16 @@ def drawGraph(data, directed=False):
         G.add_node(chr(65+i))
         for j in range(len(data)):
             if chr(65+j) in data[i][chr(65+i)]:
-                if directed:
-                    G.add_edge(chr(65+i), chr(65+j))
-                else:
-                    G.add_edge(chr(65+j), chr(65+i))
+                G.add_edge(chr(65+i), chr(65+j))
+
                 
     pos = nx.spring_layout(G)
     
-    nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=directed)
+    # Draw the graph with proper arrowstyle for directed graphs
+    if directed:
+        nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=True, arrowstyle='-|>')
+    else:
+        nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=False)
+    
     plt.show()
+
