@@ -1,17 +1,37 @@
-from showGraph import generateGraph, drawGraph
-from dataValidator import is_cyclic
+from graphClass import Node, Graph
+nodes = {name: Node(name) for name in "ABCDEFGH"}
 
-testG = {
-    "A": ["B", "C", "D", "E", "F", "G", "H"],
-    "B": ["C", "D", "E"],
-    "C": ["F", "G"],
-    "D": ["E"],
-    "E": ["D", "G"],
-    "F": ["C", "H"],
-    "G": ["C", "E"],
-    "H": ["F"]
-}
+nodes["A"].add_neighbor(nodes["B"])
+nodes["A"].add_neighbor(nodes["C"])
+nodes["A"].add_neighbor(nodes["D"])
+nodes["A"].add_neighbor(nodes["E"])
+nodes["A"].add_neighbor(nodes["F"])
+nodes["A"].add_neighbor(nodes["G"])
+nodes["A"].add_neighbor(nodes["H"])
+nodes["B"].add_neighbor(nodes["C"])
+nodes["B"].add_neighbor(nodes["D"])
+nodes["B"].add_neighbor(nodes["E"])
+nodes["C"].add_neighbor(nodes["F"])
+nodes["C"].add_neighbor(nodes["G"])
+nodes["D"].add_neighbor(nodes["E"])
+nodes["E"].add_neighbor(nodes["D"])
+nodes["E"].add_neighbor(nodes["G"])
+nodes["F"].add_neighbor(nodes["C"])
+nodes["F"].add_neighbor(nodes["H"])
+nodes["G"].add_neighbor(nodes["C"])
+nodes["G"].add_neighbor(nodes["E"])
+nodes["H"].add_neighbor(nodes["F"])
 
-generateGraph(testG)
-print("Is cyclic; ",is_cyclic(testG))
-#drawGraph(testG, True)
+graph = Graph()
+graph.directed = True
+
+for node in nodes.values():
+    graph.add_node(node)
+
+if graph.is_cyclic():
+    print("The graph contains a cycle.")
+else:
+    print("The graph is acyclic.")
+
+# Draw the graph
+graph.draw()
