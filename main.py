@@ -31,7 +31,8 @@ for node in nodes.values():
 if graph.is_cyclic():
     print("The graph contains a cycle.")
 else:
-    print("The graph is acyclic.")
+    print("The graph does not contain a cycle.")
 
 # Draw the graph
+graph.print_graph()
 graph.draw()
