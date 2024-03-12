@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 class Node:
     def __init__(self, name):
         self.name = name
-        self.neighbors = []
+        self.neighbors = {}
+        self.rang = -1
 
-    def add_neighbor(self, neighbor):
-        self.neighbors.append(neighbor)
+    def add_neighbor(self, neighbor, weight):
+        self.neighbors[neighbor.name] = weight
 
     #I'm not sure if we should use this method, but I leave it there, it could be useful
     def __eq__(self, __value: object) -> bool:
@@ -20,7 +21,6 @@ class Node:
 class Graph:
     def __init__(self):
         self.nodes = []
-        self.directed = False
     
     def get_node_from_name(self, name):
         for node in self.nodes:
@@ -38,14 +38,15 @@ class Graph:
         if not self.check_node(node.name):
             self.nodes.append(node)
 
-    def add_edge(self, node1, node2):
+    def add_edge(self, node1, node2, dist):
         if self.check_node(node2.name) and self.check_node(node1.name):
-            node1.add_neighbor(node2.name)
+            node1.add_neighbor(node2.name, dist)
 
     def is_cyclic(self):
         def dfs(start_node, visited, parent):
             visited.add(start_node.name)
-            for neighbor in start_node.neighbors:
+            for neighbor in start_node.neighbors.keys():
+                neighbor = self.get_node_from_name(neighbor)
                 if neighbor.name not in visited:
                     if dfs(neighbor, visited, start_node):
                         return True
@@ -71,27 +72,25 @@ class Graph:
             print(node.name, end="\t")
             for node2 in self.nodes:
                 found = "*"
-                for neighbor in node.neighbors:
+                for neighbor in node.neighbors.keys():
+                    neighbor = self.get_node_from_name(neighbor)
                     if neighbor.name == node2.name:
-                        found = node.name
+                        found = node.neighbors[neighbor.name]
                 print(found, end="\t")
             print()
             
 
     def draw(self):
-        G = nx.Graph()
-        if self.directed:
-            G = nx.DiGraph()
+
+        G = nx.DiGraph()
 
         for node in self.nodes:
-            for neighbor in node.neighbors:
+            for neighbor in node.neighbors.keys():
+                neighbor = self.get_node_from_name(neighbor)
                 G.add_edge(node.name, neighbor.name)
 
         pos = nx.spring_layout(G)
 
-        if self.directed:
-            nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=True, arrowstyle='-|>')
-        else:
-            nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=False)
+        nx.draw(G, pos, with_labels=True, font_weight='bold', arrows=True, arrowstyle='-|>')
 
         plt.show()
