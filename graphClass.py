@@ -86,7 +86,7 @@ class Graph:
                     cpt_rank+=1
                     done.append(node.name)
                     print(node.name, node.rang, done)
-            if self.verif_rang()==False:
+            if self.verif_rang()==True:
                 print("Les rangs ont été attribué avec succès")
             else:
                 print("Les rangs n'ont pas été attribués")
