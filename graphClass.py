@@ -61,6 +61,28 @@ class Graph:
                     return True
         return False
 
+    def get_previous(self, node, done=[]):
+        previous = []
+        for n in self.nodes:
+            for neighbor in n.neighbors.keys():
+                neighbor = self.get_node_from_name(neighbor)
+                if neighbor.name == node.name and n.name not in done:
+                    previous.append(n)
+        return previous
+
+    def get_rank(self,start):
+        cpt_rank = 0
+        done=[]
+        if self.check_node(start)==True:
+            for node in self.nodes:
+                if self.get_previous(node,done)==[]:
+                    node.rang=cpt_rank
+                    cpt_rank+=1
+                    done.append(node.name)
+                    print(node.name, node.rang, done)
+        return None
+
+
     def print_graph(self):
 
         print(" \t", end="")
