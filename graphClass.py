@@ -70,6 +70,12 @@ class Graph:
                     previous.append(n)
         return previous
 
+    def verif_rang(self):
+        for node in self.nodes:
+            if node.rang== -1:
+                return False
+        return True
+
     def get_rank(self,start):
         cpt_rank = 0
         done=[]
@@ -80,6 +86,12 @@ class Graph:
                     cpt_rank+=1
                     done.append(node.name)
                     print(node.name, node.rang, done)
+            if self.verif_rang()==False:
+                print("Les rangs ont été attribué avec succès")
+            else:
+                print("Les rangs n'ont pas été attribués")
+                for nodes in self.nodes:
+                    nodes.rang=-1
         return None
 
 
