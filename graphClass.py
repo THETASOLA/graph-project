@@ -76,6 +76,14 @@ class Graph:
                 return False
         return True
 
+    def verif_poids(self):
+        for node in self.nodes:
+            for values in node.neighbors.values():
+                if int(values)<0:
+                    print(node.name, "a un poids négatif")
+                    return False
+        return True
+
     def get_rank(self,start):
         cpt_rank = 0
         done=[]
