@@ -61,6 +61,48 @@ class Graph:
                     return True
         return False
 
+    def get_previous(self, node, done=[]):
+        previous = []
+        for n in self.nodes:
+            for neighbor in n.neighbors.keys():
+                neighbor = self.get_node_from_name(neighbor)
+                if neighbor.name == node.name and n.name not in done:
+                    previous.append(n)
+        return previous
+
+    def verif_rang(self):
+        for node in self.nodes:
+            if node.rang== -1:
+                return False
+        return True
+
+    def verif_poids(self):
+        for node in self.nodes:
+            for values in node.neighbors.values():
+                if int(values)<0:
+                    print(node.name, "a un poids négatif")
+                    return False
+        return True
+
+    def get_rank(self,start):
+        cpt_rank = 0
+        done=[]
+        if self.check_node(start)==True:
+            for node in self.nodes:
+                if self.get_previous(node,done)==[]:
+                    node.rang=cpt_rank
+                    cpt_rank+=1
+                    done.append(node.name)
+                    print(node.name, node.rang, done)
+            if self.verif_rang()==True:
+                print("Les rangs ont été attribué avec succès")
+            else:
+                print("Les rangs n'ont pas été attribués")
+                for nodes in self.nodes:
+                    nodes.rang=-1
+        return None
+
+
     def print_graph(self):
 
         print(" \t", end="")
