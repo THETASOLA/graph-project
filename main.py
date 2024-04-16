@@ -1,4 +1,6 @@
 from graphClass import Node, Graph
+from file_function import graph_initialization
+import os
 
 nodes = {name: Node(name) for name in "ABCDEFGHIJ"}
 nodes["A"].add_neighbor(nodes["B"], 7)
@@ -33,6 +35,19 @@ for node in nodes.values():
 start_node = graph.get_start_node("A")
 end_node = graph.get_end_node("J")
 
+# ------------------------- Reading file and start of the program -------------------------
+os.system('cls')
+try:
+    num_file = int(input("Veuillez choisir une table de contrainte de "
+                         "1 à 14 en inscrivant le numéro de la table : "))
+    if num_file < 1 or num_file > 14:
+        raise ValueError
+except ValueError:
+    print("Veuillez entrer un numéro de table valide")
+
+graph_initialization(num_file)
+
+# ------------------------- Start of user interface -------------------------
 while True:
     print("\nChoisissez une option :")
     print("1. Afficher le graphe")
