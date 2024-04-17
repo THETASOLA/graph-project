@@ -38,6 +38,8 @@ def remove_backslashn(step):
         step = step[:-1]
     return step
 
+
+
 def graph_initialization(num_file):
     """
     Initialize nodes
@@ -48,8 +50,11 @@ def graph_initialization(num_file):
     # initialize nodes
     nodes = {element[0]: Node(element[0]) for element in constraint_table}
 
+    # add neighbors to nodes
     for element in constraint_table:
-        if len(element) > 2:
+        if len(element) == 3:
+            nodes[element[2]].add_neighbor(nodes[element[0]], constraint_table[int(element[2])][1])
+        if len(element) > 3:
             for i in range(2, len(element) - 1):
                 nodes[element[i]].add_neighbor(nodes[element[0]], constraint_table[int(element[i])][1])
 
@@ -58,7 +63,14 @@ def graph_initialization(num_file):
 
     for node in nodes.values():
         graph.add_node(node)
+    """
+    # get start and end node
+    nodes_without_successors = graph.find_nodes_without_successors()
+    print(nodes_without_successors)
+    print(nodes["3"].neighbors)
+    graph.print_graph()
 
+    """
     start_node = graph.get_start_node(1)
     end_node = graph.get_end_node(len(nodes))
 
