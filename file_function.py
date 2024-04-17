@@ -57,7 +57,7 @@ def graph_initialization(num_file):
         if len(element) > 3:
             for i in range(2, len(element) - 1):
                 nodes[element[i]].add_neighbor(nodes[element[0]], constraint_table[int(element[i])][1])
-
+    # TODO : probleme de coût sur le graghe
     graph = Graph()
     graph.directed = True
 
