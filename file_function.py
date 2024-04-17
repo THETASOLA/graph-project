@@ -59,7 +59,7 @@ def graph_initialization(num_file):
     for node in nodes.values():
         graph.add_node(node)
 
-    start_node = graph.get_start_node("A")
-    end_node = graph.get_end_node("J")
+    start_node = graph.get_start_node(1)
+    end_node = graph.get_end_node(len(nodes))
 
     return nodes, graph, start_node, end_node
