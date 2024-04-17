@@ -110,11 +110,11 @@ class Graph:
         else:
             raise ValueError("Le nœud d'arrivée n'existe pas dans le graphe.")
 
-    # search_pred : cette fonction renvoie un tableau des prédécesseur du nœud mis en paramètre
+    # search_pred : cette fonction renvoie un tableau des prédécesseurs du nœud mis en paramètre
     def search_pred(self, node):
         return [neighbor.name for neighbor in self.nodes if node.name in neighbor.neighbors.keys()]
 
-    # search-succ : cette fonction renvoie un tableau des successeur du nœud mis en paramètre
+    # search_succ : cette fonction renvoie un tableau des successeurs du nœud mis en paramètre
     def search_succ(self, node):
         return [neighbor.name for neighbor in self.nodes if node.name in neighbor.neighbors]
 

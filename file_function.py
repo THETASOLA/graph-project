@@ -51,7 +51,7 @@ def graph_initialization(num_file):
     for element in constraint_table:
         if len(element) > 2:
             for i in range(2, len(element) - 1):
-                nodes[element[i]].add_neighbor(nodes[element[0]], element[1])
+                nodes[element[i]].add_neighbor(nodes[element[0]], constraint_table[int(element[i])][1])
 
     graph = Graph()
     graph.directed = True
