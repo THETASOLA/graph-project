@@ -1,7 +1,7 @@
 from graphClass import Node, Graph
 from file_function import graph_initialization
 import os
-
+"""
 nodes = {name: Node(name) for name in "ABCDEFGHIJ"}
 nodes["A"].add_neighbor(nodes["B"], 7)
 nodes["A"].add_neighbor(nodes["D"], 7)
@@ -34,6 +34,7 @@ for node in nodes.values():
 
 start_node = graph.get_start_node("A")
 end_node = graph.get_end_node("J")
+"""
 
 # ------------------------- Reading file and start of the program -------------------------
 os.system('cls')
@@ -45,7 +46,7 @@ try:
 except ValueError:
     print("Veuillez entrer un numéro de table valide")
 
-graph_initialization(num_file)
+nodes, graph, start_node, end_node = graph_initialization(num_file)
 
 # ------------------------- Start of user interface -------------------------
 while True:

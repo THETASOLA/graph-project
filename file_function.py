@@ -46,46 +46,12 @@ def graph_initialization(num_file):
     # read file
     constraint_table = read_file("./test_file/table " + str(num_file) + ".txt")
     # initialize nodes
-    for element in constraint_table:
-        Node(element[0])
-
-    # TODO : Implementation a prendre avec des pincettes : en cours
+    nodes = {element[0]: Node(element[0]) for element in constraint_table}
 
     for element in constraint_table:
         if len(element) > 2:
             for i in range(2, len(element) - 1):
-                Node(element[i]).add_neighbor(Node(element[0]),element[1])
-
-    graph = Graph()
-    graph.directed = True
-
-    for element in constraint_table:
-        graph.add_node(Node(element[0]))
-
-    """
-    nodes = {name: Node(name) for name in "ABCDEFGHIJ"}
-    nodes["A"].add_neighbor(nodes["B"], 7)
-    nodes["A"].add_neighbor(nodes["D"], 7)
-
-    nodes["B"].add_neighbor(nodes["C"], 3)
-
-    nodes["C"].add_neighbor(nodes["E"], 1)
-    nodes["C"].add_neighbor(nodes["F"], 1)
-    nodes["C"].add_neighbor(nodes["G"], 1)
-
-    nodes["D"].add_neighbor(nodes["E"], 8)
-    nodes["D"].add_neighbor(nodes["F"], 8)
-    nodes["D"].add_neighbor(nodes["G"], 8)
-
-    nodes["E"].add_neighbor(nodes["J"], 2)
-
-    nodes["F"].add_neighbor(nodes["H"], 1)
-
-    nodes["G"].add_neighbor(nodes["J"], 1)
-
-    nodes["H"].add_neighbor(nodes["I"], 3)
-
-    nodes["I"].add_neighbor(nodes["J"], 2)
+                nodes[element[i]].add_neighbor(nodes[element[0]], element[1])
 
     graph = Graph()
     graph.directed = True
@@ -96,5 +62,4 @@ def graph_initialization(num_file):
     start_node = graph.get_start_node("A")
     end_node = graph.get_end_node("J")
 
-    return nodes
-    """
+    return nodes, graph, start_node, end_node
