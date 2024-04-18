@@ -1,9 +1,24 @@
 from graphClass import Node, Graph
+
+def input_file():
+    """
+    Ask the user to choose a constraint table
+    :return num_file: the number of the file to read
+    """
+    num_file = 0
+    while num_file < 1 or num_file > 14:
+        num_file = int(input("Veuillez choisir une table de contrainte de "
+                             "1 à 14 en inscrivant le numéro de la table : "))
+        if num_file < 1 or num_file > 14:
+            print("Veuillez entrer un numéro de table valide")
+
+    return num_file
+
 def read_file(filename):
     """
     Read file, remove backslash n, and return a list of steps from the constraint table
     :param filename: the name of the file
-    :return steps:
+    :return steps: a list of steps from the constraint table
     """
     with open(filename, 'r') as f:
         data = f.readlines()
@@ -77,4 +92,4 @@ def graph_initialization(num_file):
     start_node = graph.get_start_node("1")
     end_node = graph.get_end_node(f"{len(nodes)}")
 
-    return nodes, graph, start_node, end_node
+    return graph, start_node, end_node

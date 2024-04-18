@@ -1,18 +1,11 @@
 from graphClass import Node, Graph
-from file_function import graph_initialization
+from file_function import graph_initialization, input_file
 import os
 
 # ------------------------- Reading file and start of the program -------------------------
 os.system('cls')
-try:
-    num_file = int(input("Veuillez choisir une table de contrainte de "
-                         "1 à 14 en inscrivant le numéro de la table : "))
-    if num_file < 1 or num_file > 14:
-        raise ValueError
-except ValueError:
-    print("Veuillez entrer un numéro de table valide")
-
-nodes, graph, start_node, end_node = graph_initialization(num_file)
+num_file = input_file()
+graph, start_node, end_node = graph_initialization(num_file)
 # TODO : vider la mémoire des instances quand on change de graphe
 
 # ------------------------- Start of user interface -------------------------
@@ -23,7 +16,8 @@ while True:
     print("3. Vérifier si le graphe contient des poids négatifs")
     print("4. Afficher les chemins de A à J")
     print("5. Dessiner le graphe")
-    print("6. Quitter")
+    print("6. Changer de table de contrainte")
+    print("7. Quitter")
 
     choice = input("Entrez le numéro de l'option choisie : ")
 
@@ -44,6 +38,10 @@ while True:
     elif choice == "5":
         graph.draw()
     elif choice == "6":
+        os.system('cls')
+        num_file = input_file()
+        graph, start_node, end_node = graph_initialization(num_file)
+    elif choice == "7":
         break
     else:
         print("Option invalide. Veuillez réessayer.")
