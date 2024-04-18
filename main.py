@@ -2,40 +2,6 @@ from graphClass import Node, Graph
 from file_function import graph_initialization
 import os
 
-nodes = {name: Node(name) for name in "ABCDEFGHIJ"}
-nodes["A"].add_neighbor(nodes["B"], 7)
-nodes["A"].add_neighbor(nodes["D"], 7)
-
-nodes["B"].add_neighbor(nodes["C"], 3)
-
-nodes["C"].add_neighbor(nodes["E"], 1)
-nodes["C"].add_neighbor(nodes["F"], 1)
-nodes["C"].add_neighbor(nodes["G"], 1)
-
-nodes["D"].add_neighbor(nodes["E"], 8)
-nodes["D"].add_neighbor(nodes["F"], 8)
-nodes["D"].add_neighbor(nodes["G"], 8)
-
-nodes["E"].add_neighbor(nodes["J"], 2)
-
-nodes["F"].add_neighbor(nodes["H"], 1)
-
-nodes["G"].add_neighbor(nodes["J"], 1)
-
-nodes["H"].add_neighbor(nodes["I"], 3)
-
-nodes["I"].add_neighbor(nodes["J"], 2)
-
-graph = Graph()
-graph.directed = True
-
-for node in nodes.values():
-    graph.add_node(node)
-
-start_node = graph.get_start_node("A")
-end_node = graph.get_end_node("J")
-"""
-
 # ------------------------- Reading file and start of the program -------------------------
 os.system('cls')
 try:
@@ -48,7 +14,7 @@ except ValueError:
 
 nodes, graph, start_node, end_node = graph_initialization(num_file)
 # TODO : vider la mémoire des instances quand on change de graphe
-"""
+
 # ------------------------- Start of user interface -------------------------
 while True:
     print("\nChoisissez une option :")

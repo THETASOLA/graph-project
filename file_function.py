@@ -42,8 +42,9 @@ def remove_backslashn(step):
 
 def graph_initialization(num_file):
     """
-    Initialize nodes
-    :return nodes:
+    Initialize the graph with the constraint table
+    :param num_file: number of the file to read
+    :return nodes, graph, start_node, end_node:
     """
     # read file
     constraint_table = read_file("./test_file/table " + str(num_file) + ".txt")
@@ -53,25 +54,27 @@ def graph_initialization(num_file):
     # add neighbors to nodes
     for element in constraint_table:
         if len(element) == 3:
-            nodes[element[2]].add_neighbor(nodes[element[0]], constraint_table[int(element[2])][1])
+            nodes[element[2]].add_neighbor(nodes[element[0]], constraint_table[int(element[2]) - 1][1])
         if len(element) > 3:
-            for i in range(2, len(element) - 1):
-                nodes[element[i]].add_neighbor(nodes[element[0]], constraint_table[int(element[i])][1])
-    # TODO : probleme de coût sur le graghe
+            for i in range(2, len(element)):
+                nodes[element[i]].add_neighbor(nodes[element[0]], constraint_table[int(element[i]) - 1][1])
+
     graph = Graph()
     graph.directed = True
 
     for node in nodes.values():
         graph.add_node(node)
-    """
-    # get start and end node
-    nodes_without_successors = graph.find_nodes_without_successors()
-    print(nodes_without_successors)
-    print(nodes["3"].neighbors)
-    graph.print_graph()
 
+    # get start and end node
     """
-    start_node = graph.get_start_node(1)
-    end_node = graph.get_end_node(len(nodes))
+    # Code bon à mettre en place quand on aura les vrais start et end node
+    # avec plusieurs départs et fins
+    start_node = graph.get_start_node(graph.find_nodes_without_predecessors())
+    end_node = graph.get_end_node(graph.find_nodes_without_successors())
+    """
+
+    # Attribution temporaire de start_node et end_node pour faire fonctionner le programme
+    start_node = graph.get_start_node("1")
+    end_node = graph.get_end_node(f"{len(nodes)}")
 
     return nodes, graph, start_node, end_node

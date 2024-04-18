@@ -118,6 +118,27 @@ class Graph:
     def search_succ(self, node):
         return [neighbor.name for neighbor in self.nodes if node.name in neighbor.neighbors]
 
+    # find_nodes_without_successors : cette fonction renvoie un tableau des nœuds sans successeurs
+    def find_nodes_without_successors(self):
+        nodes_without_successors = []
+        for node in self.nodes:
+            if not node.neighbors:
+                nodes_without_successors.append(node.name)
+        return nodes_without_successors
+
+    # find_nodes_without_predecessors : cette fonction renvoie un tableau des nœuds sans prédécesseurs
+    def find_nodes_without_predecessors(self):
+        nodes_without_predecessors = []
+        for node in self.nodes:
+            has_predecessor = False
+            for potential_predecessor in self.nodes:
+                if node.name in potential_predecessor.neighbors:
+                    has_predecessor = True
+                    break
+            if not has_predecessor:
+                nodes_without_predecessors.append(node.name)
+        return nodes_without_predecessors
+
     # get_total_weight : cette fonction renvoie la somme des poids des nœuds mis en paramètres
     def get_total_weight(self, path):
         total_weight = 0
