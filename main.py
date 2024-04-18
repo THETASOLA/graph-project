@@ -6,7 +6,6 @@ import os
 os.system('cls')
 num_file = input_file()
 graph, start_node, end_node = graph_initialization(num_file)
-# TODO : vider la mémoire des instances quand on change de graphe
 
 # ------------------------- Start of user interface -------------------------
 while True:
