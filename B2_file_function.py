@@ -94,19 +94,21 @@ def traces_execution():
     # Check if the directory contain all the test files : to know if the file traces.txt already exists
     # path of the directory
     path = "B2_traces_execution"
-
     # Getting the list of directories
     dir_traces = os.listdir(path)
-
     # Checking if the list of directories contains all the test files
     if len(dir_traces) < 14:
+
         # Running the function for each file
         for num_file in range(1, 15):
             nodes, graph, start_node, end_node = graph_initialization(num_file)
             with open("B2_traces_execution/trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
+                # TODO: nombre de sommets et d'arcs en comptant les entrées et sorties à 0
+                """f.write(f"Nombre de sommets : {len(nodes)}\n")"""  # TODO : Ajouter sommets d'entrée et de sortie quand E et S
 
                 f.write("----------- Etape 2 : Matrice des valeurs -----------\n")
+                # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
                     graph.print_graph()
                     print("\n")

@@ -3,7 +3,7 @@ from B2_file_function import graph_initialization, input_file, traces_execution
 import os
 
 # ------------------------- Reading file and start of the program -------------------------
-"""traces_execution()"""
+traces_execution()
 os.system('cls')
 num_file = input_file()
 nodes, graph, start_node, end_node = graph_initialization(num_file)
