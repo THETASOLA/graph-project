@@ -87,8 +87,9 @@ def graph_initialization(num_file):
     """
 
     # Attribution TEMPORAIRE de start_node et end_node pour faire fonctionner le programme
-    start_node = graph.get_start_node("1")
-    end_node = graph.get_end_node(f"{len(nodes)}")
+    start_node = graph.get_start_node()
+    end_node = graph.get_end_node()
+
 
     return graph, start_node, end_node
 
@@ -119,7 +120,7 @@ def traces_execution():
                 f.write("Vérification si le graphe contient des poids négatifs\n")
                 f.write(str(graph.verif_poids()) + "\n\n")
 
-                f.write("Affichage des chemins de A à J\n")
+                f.write("Affichage des chemins de E à S\n")
                 f.write(str(graph.display_paths(start_node, end_node)) + "\n\n")
 
                 f.write("Dessin du graphe\n")

@@ -94,21 +94,38 @@ class Graph:
                     nodes.rank = -1
         return None
 
-    # Mettre dans une variable le nœud de début
-    def get_start_node(self, name):
-        start_node = self.get_node_from_name(name)
-        if start_node:
-            return start_node
+    def get_start_node(self):
+        start_nodes = self.find_nodes_without_predecessors()
+        if len(start_nodes) == 1:
+            return self.get_node_from_name(start_nodes[0])
+        elif len(start_nodes) > 1:
+            # Créer un nouveau nœud 'E'
+            new_start_node = Node('E')
+            self.add_node(new_start_node)
+            # Ajouter des arêtes de 'E' vers tous les nœuds de début avec un poids de 0
+            for start_node in start_nodes:
+                start_node_obj = self.get_node_from_name(start_node)
+                new_start_node.add_neighbor(start_node_obj, 0)
+            return new_start_node
         else:
-            raise ValueError("Le nœud de départ n'existe pas dans le graphe.")
+            raise ValueError("Il n'y a pas de nœud de départ dans le graphe.")
 
-    # Mettre dans une variable le nœud de fin
-    def get_end_node(self, name):
-        end_node = self.get_node_from_name(name)
-        if end_node:
-            return end_node
+
+    def get_end_node(self):
+        end_nodes = self.find_nodes_without_successors()
+        if len(end_nodes) == 1:
+            return self.get_node_from_name(end_nodes[0])
+        elif len(end_nodes) > 1:
+            # Créer un nouveau nœud 'S'
+            new_end_node = Node('S')
+            self.add_node(new_end_node)
+            # Ajouter des arêtes de tous les nœuds de fin vers 'S' avec un poids de 0
+            for end_node in end_nodes:
+                end_node_obj = self.get_node_from_name(end_node)
+                end_node_obj.add_neighbor(new_end_node, 0)
+            return new_end_node
         else:
-            raise ValueError("Le nœud d'arrivée n'existe pas dans le graphe.")
+            raise ValueError("Il n'y a pas de nœud d'arrivée dans le graphe.")
 
     # search_pred : cette fonction renvoie un tableau des prédécesseurs du nœud mis en paramètre
     def search_pred(self, node):
@@ -246,9 +263,9 @@ class Graph:
         last_node = self.nodes[-1].name
 
         for node in G.nodes():
-            if node == first_node:
+            if node == 'E':
                 node_colors.append('green')
-            elif node == last_node:
+            elif node == 'S':
                 node_colors.append('red')
             else:
                 node_colors.append('white')
