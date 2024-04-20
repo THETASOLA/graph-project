@@ -1,5 +1,5 @@
-from graphClass import Node, Graph
-from file_function import graph_initialization, input_file
+from B2_graphClass import Node, Graph
+from B2_file_function import graph_initialization, input_file
 import os
 
 # ------------------------- Reading file and start of the program -------------------------

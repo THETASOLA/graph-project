@@ -1,4 +1,5 @@
-from graphClass import Node, Graph
+from B2_graphClass import Node, Graph
+import os
 
 def input_file():
     """
@@ -62,7 +63,7 @@ def graph_initialization(num_file):
     :return nodes, graph, start_node, end_node:
     """
     # read file
-    constraint_table = read_file("./test_file/table " + str(num_file) + ".txt")
+    constraint_table = read_file("./B2_test_file/table " + str(num_file) + ".txt")
     # initialize nodes
     nodes = {element[0]: Node(element[0]) for element in constraint_table}
 
@@ -90,3 +91,36 @@ def graph_initialization(num_file):
     end_node = graph.get_end_node(f"{len(nodes)}")
 
     return graph, start_node, end_node
+
+def traces_execution():
+    """
+    Test all the functions and write all the result in txt file
+    :param: None
+    """
+    # Check if the directory contain all the test files : to know if the file traces.txt already exists
+    # path of the directory
+    path = "B2_traces_execution"
+
+    # Getting the list of directories
+    dir_traces = os.listdir(path)
+
+    # Checking if the list of directories contains all the test files
+    if len(dir_traces) < 14:
+        # Running the function for each file
+        for num_file in range(1, 15):
+            graph, start_node, end_node = graph_initialization(num_file)
+            with open("traces.txt", "w") as f:
+                f.write("Affichage du graphe\n")
+                f.write(str(graph.print_graph()) + "\n\n")
+
+                f.write("Vérification si le graphe est cyclique\n")
+                f.write(str(graph.is_cyclic()) + "\n\n")
+
+                f.write("Vérification si le graphe contient des poids négatifs\n")
+                f.write(str(graph.verif_poids()) + "\n\n")
+
+                f.write("Affichage des chemins de A à J\n")
+                f.write(str(graph.display_paths(start_node, end_node)) + "\n\n")
+
+                f.write("Dessin du graphe\n")
+                f.write(str(graph.draw()) + "\n\n")
