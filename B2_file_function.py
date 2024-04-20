@@ -80,18 +80,10 @@ def graph_initialization(num_file):
         graph.add_node(node)
 
     # get start and end node
-    """
-    # Code bon à mettre en place quand on aura les vrais start et end node avec plusieurs départs et fins
-    start_node = graph.get_start_node(graph.find_nodes_without_predecessors())
-    end_node = graph.get_end_node(graph.find_nodes_without_successors())
-    """
-
-    # Attribution TEMPORAIRE de start_node et end_node pour faire fonctionner le programme
     start_node = graph.get_start_node()
     end_node = graph.get_end_node()
 
-
-    return graph, start_node, end_node
+    return nodes, graph, start_node, end_node
 
 def traces_execution():
     """
@@ -109,9 +101,16 @@ def traces_execution():
     if len(dir_traces) < 14:
         # Running the function for each file
         for num_file in range(1, 15):
-            graph, start_node, end_node = graph_initialization(num_file)
-            with open("traces.txt", "w") as f:
-                f.write("Affichage du graphe\n")
+            nodes, graph, start_node, end_node = graph_initialization(num_file)
+            with open("B2_traces_execution/trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
+                f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
+
+                f.write("----------- Etape 2 : Matrice des valeurs -----------\n")
+                """graph.print_graph()"""
+
+                f.write("------------- Etape 3 -------------\n")
+
+                """f.write("Affichage du graphe\n")
                 f.write(str(graph.print_graph()) + "\n\n")
 
                 f.write("Vérification si le graphe est cyclique\n")
@@ -125,3 +124,4 @@ def traces_execution():
 
                 f.write("Dessin du graphe\n")
                 f.write(str(graph.draw()) + "\n\n")
+                """

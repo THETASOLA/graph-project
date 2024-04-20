@@ -1,11 +1,12 @@
 from B2_graphClass import Node, Graph
-from B2_file_function import graph_initialization, input_file
+from B2_file_function import graph_initialization, input_file, traces_execution
 import os
 
 # ------------------------- Reading file and start of the program -------------------------
+"""traces_execution()"""
 os.system('cls')
 num_file = input_file()
-graph, start_node, end_node = graph_initialization(num_file)
+nodes, graph, start_node, end_node = graph_initialization(num_file)
 
 # ------------------------- Start of user interface -------------------------
 while True:
@@ -13,7 +14,7 @@ while True:
     print("1. Afficher le graphe")
     print("2. Vérifier si le graphe est cyclique")
     print("3. Vérifier si le graphe contient des poids négatifs")
-    print("4. Afficher les chemins de A à J")
+    print(f"4. Afficher les chemins de {start_node.name} à {end_node.name}")
     print("5. Dessiner le graphe")
     print("6. Changer de table de contrainte")
     print("7. Quitter")
@@ -39,7 +40,7 @@ while True:
     elif choice == "6":
         os.system('cls')
         num_file = input_file()
-        graph, start_node, end_node = graph_initialization(num_file)
+        nodes, graph, start_node, end_node = graph_initialization(num_file)
     elif choice == "7":
         break
     else:
