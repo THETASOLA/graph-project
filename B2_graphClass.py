@@ -133,7 +133,7 @@ class Graph:
 
     # search_succ : cette fonction renvoie un tableau des successeurs du nœud mis en paramètre
     def search_succ(self, node):
-        return [neighbor.name for neighbor in self.nodes if node.name in neighbor.neighbors]
+        return [neighbor.name for neighbor in self.nodes if neighbor.name in node.neighbors]
 
     # find_nodes_without_successors : cette fonction renvoie un tableau des nœuds sans successeurs
     def find_nodes_without_successors(self):
@@ -200,15 +200,9 @@ class Graph:
 
         # Récupérer tous les chemins possibles pour aller du nœud start_node au nœud end_node
         all_paths = self.get_path(start_node, end_node)
-        print(f"\nTous les chemins possibles pour aller du nœud {start_node.name} au nœud {end_node.name} :")
-        for path in all_paths:
-            print([node.name for node in path])
 
         # Récupérer le poids total de chaque chemin possible pour aller du nœud start_node au nœud end_node
         path_weights = [self.get_total_weight(path) for path in all_paths]
-        print(f"\nPoids total de chaque chemin possible pour aller du nœud {start_node.name} au nœud {end_node.name} :")
-        for weight in path_weights:
-            print(weight)
 
         # Afficher les informations sous forme de tableau dans la console
         print(f"\nInformations sur tous les chemins possibles pour aller du nœud {start_node.name} au nœud {end_node.name} :")
