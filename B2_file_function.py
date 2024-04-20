@@ -1,5 +1,6 @@
 from B2_graphClass import Node, Graph
 import os
+import contextlib
 
 def input_file():
     """
@@ -106,7 +107,9 @@ def traces_execution():
                 f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
 
                 f.write("----------- Etape 2 : Matrice des valeurs -----------\n")
-                """graph.print_graph()"""
+                with contextlib.redirect_stdout(f):
+                    graph.print_graph()
+                    print("\n")
 
                 f.write("------------- Etape 3 -------------\n")
 
