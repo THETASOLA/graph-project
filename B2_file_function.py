@@ -135,7 +135,7 @@ def traces_execution():
                     graph.print_graph()
                     print("\n")
 
-                f.write("------------- Etape 3 -------------\n")
+                f.write("------------- Etape 3 : Etat des entrées/sorties et ordonnancement -------------\n")
                 # Write the start and end node to the file
                 # If the start_node is "E"
                 if start_node.name == "E":
