@@ -17,7 +17,8 @@ while True:
     print(f"4. Afficher les chemins de {start_node.name} à {end_node.name}")
     print("5. Dessiner le graphe")
     print("6. Changer de table de contrainte")
-    print("7. Quitter")
+    print("7. Obtenir les rangs des sommets")
+    print("8. Quitter")
 
     choice = input("Entrez le numéro de l'option choisie : ")
 
@@ -42,6 +43,8 @@ while True:
         num_file = input_file()
         nodes, graph, start_node, end_node = graph_initialization(num_file)
     elif choice == "7":
+        graph.get_rank()
+    elif choice == "8":
         break
     else:
         print("Option invalide. Veuillez réessayer.")
