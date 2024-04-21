@@ -107,7 +107,6 @@ def traces_execution():
             nodes, graph, start_node, end_node = graph_initialization(num_file)
             with open("B2_traces_execution/trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
-                # TODO: nombre de sommets et d'arcs en comptant les entrées et sorties à 0
                 # Number of nodes
                 if start_node.name == "E" and end_node.name == "S":
                     f.write(f"Nombre de sommets : {len(nodes) + 2}\n")
@@ -117,6 +116,11 @@ def traces_execution():
                     f.write(f"Nombre de sommets : {len(nodes)}\n")
 
                 # Number of edges
+                f.write(f"Nombre d'arcs : {graph.number_of_edges()}\n")
+
+                # Description of the node neighbors and their weights
+                # Node --> sucessor : weight
+
 
 
                 f.write("----------- Etape 2 : Matrice des valeurs -----------\n")

@@ -370,3 +370,10 @@ class Graph:
         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='black')
 
         plt.show()
+
+    def number_of_edges(self):
+        """
+        Get the number of edges in the graph
+        :return:
+        """
+        return sum(len(node.neighbors) for node in self.nodes)
