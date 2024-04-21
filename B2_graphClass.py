@@ -309,7 +309,8 @@ class Graph:
         path_weights = [self.get_total_weight(path) for path in all_paths]
 
         # Display information in tabular form in the console
-        print(f"\nInformations sur tous les chemins possibles pour aller du nœud {start_node.name} au nœud {end_node.name} :")
+        print(
+            f"\nInformations sur tous les chemins possibles pour aller du nœud {start_node.name} au nœud {end_node.name} :")
         for path, weight in zip(all_paths, path_weights):
             print(f"Chemin : {[node.name for node in path]}, Poids total : {weight}")
 
@@ -319,9 +320,49 @@ class Graph:
         min_path = all_paths[path_weights.index(min_weight)]
         max_path = all_paths[path_weights.index(max_weight)]
 
+        max_graph = Graph()
+        for node in max_path:
+            max_graph.add_node(node)
+        for i in range(len(max_path) - 1):
+            node1 = max_path[i]
+            node2 = max_path[i + 1]
+            max_graph.add_edge(node1, node2, self.get_node_from_name(node1.name).neighbors[node2.name])
+
         # Display results
-        print(f"\nLe chemin le plus court est de {min_weight} en passant par : {' -> '.join([node.name for node in min_path])}")
-        print(f"Le chemin le plus long est de {max_weight} en passant par : {' -> '.join([node.name for node in max_path])}")
+        print(
+            f"\nLe chemin le plus court est de {min_weight} en passant par : {' -> '.join([node.name for node in min_path])}")
+        print(
+            f"Le chemin le plus long est de {max_weight} en passant par : {' -> '.join([node.name for node in max_path])}")
+
+        # Draw the graph with only the nodes in max_path
+        self.draw_max_path(max_path)
+
+    def draw_max_path(self, max_path):
+        """
+        Draw the graph with only the nodes and edges in the max path
+        :param max_path: list of nodes in the max path
+        :return: None
+        """
+        G = nx.DiGraph()
+
+        for i in range(len(max_path) - 1):
+            node1 = max_path[i]
+            node2 = max_path[i + 1]
+            G.add_node(node1.name)
+            G.add_node(node2.name)
+            G.add_edge(node1.name, node2.name, weight=node1.neighbors[node2.name])
+
+        node_colors = ['green' if node == max_path[0].name else ('red' if node == max_path[-1].name else 'grey') for
+                       node in G.nodes()]
+
+        pos = nx.shell_layout(G)
+        nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=500)
+        nx.draw_networkx_edges(G, pos, edge_color='black', arrows=True, arrowstyle='-|>')
+        nx.draw_networkx_labels(G, pos, font_color='black')
+        edge_labels = {(u, v): G[u][v]['weight'] for u, v in G.edges()}
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='black')
+
+        plt.show()
 
     def print_graph(self):
         """
