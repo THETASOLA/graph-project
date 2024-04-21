@@ -108,9 +108,9 @@ def traces_execution():
             with open("B2_traces_execution/trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
                 # Number of nodes
-                if start_node.name == "E" and end_node.name == "S":
+                if start_node.name == "0" and end_node.name == "S":
                     f.write(f"Nombre de sommets : {len(nodes) + 2}\n")
-                elif start_node.name == "E" or end_node.name == "S":
+                elif start_node.name == "0" or end_node.name == "S":
                     f.write(f"Nombre de sommets : {len(nodes) + 1}\n")
                 else:
                     f.write(f"Nombre de sommets : {len(nodes)}\n")
@@ -120,8 +120,8 @@ def traces_execution():
 
                 # Description of the node neighbors and their weights
                 f.write("Node --> successor : weight\n")
-                # If start_node is "E", write it to the file
-                if start_node.name == "E":
+                # If start_node is "0", write it to the file
+                if start_node.name == "0":
                     for neighbor, weight in start_node.neighbors.items():
                         f.write(f"{start_node.name} --> {neighbor} : {weight}\n")
 
@@ -137,8 +137,8 @@ def traces_execution():
 
                 f.write("------------- Etape 3 : Etat des entrées/sorties et ordonnancement -------------\n")
                 # Write the start and end node to the file
-                # If the start_node is "E"
-                if start_node.name == "E":
+                # If the start_node is "0"
+                if start_node.name == "0":
                     # Get the list of all the initiales nodes
                     starts = str(list(start_node.neighbors.keys())).translate({ord(i): None for i in '[\']'})
                     # Write the result to the file

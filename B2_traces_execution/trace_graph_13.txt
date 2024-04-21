@@ -3,8 +3,8 @@ Nombre de sommets : 6
 Nombre d'arcs : 7
 
 Node --> successor : weight
-E --> 1 : 0
-E --> 3 : 0
+0 --> 1 : 0
+0 --> 3 : 0
 1 --> 2 : 9
 2 --> S : 0
 3 --> 2 : 4
@@ -13,19 +13,19 @@ E --> 3 : 0
 
 ----------- Etape 2 : Matrice des valeurs -----------
 
-Votre graphe 1, 2, 3, 4, E, S a bien été pris en compte
+Votre graphe 1, 2, 3, 4, 0, S a bien été pris en compte
 
- 	1	2	3	4	E	S	
+ 	1	2	3	4	0	S	
 1	*	9	*	*	*	*	
 2	*	*	*	*	*	0	
 3	*	4	*	4	*	*	
 4	*	*	*	*	*	0	
-E	0	*	0	*	*	*	
+0	0	*	0	*	*	*	
 S	*	*	*	*	*	*	
 
 
 ------------- Etape 3 : Etat des entrées/sorties et ordonnancement -------------
-Il y a une seule entrée E, car il y a 2 entrées initiales : 1, 3
+Il y a une seule entrée 0, car il y a 2 entrées initiales : 1, 3
 Il y a une seule sortie S, car il y a 2 sorties initiales : 2, 4
 
 ----------- Etape 4 : Vérification des propriétés du graphe -----------
