@@ -105,7 +105,7 @@ def traces_execution():
         # Running the function for each file
         for num_file in range(1, 15):
             nodes, graph, start_node, end_node = graph_initialization(num_file)
-            with open("B2_traces_execution/trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
+            with open("B2_traces_execution/B2_trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
                 # Number of nodes
                 highest_node_value = max(map(int, (node.name for node in graph.nodes)))
