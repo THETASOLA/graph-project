@@ -191,9 +191,11 @@ class Graph:
         if len(end_nodes) == 1:
             return self.get_node_from_name(end_nodes[0])
         elif len(end_nodes) > 1:
-            # Create a new node with value of last node + 1
+            # Create a new node 'S'
+            new_end_node = Node('S')
+            """# Create a new node with value of last node + 1
             last_node_value = max(map(int, end_nodes))
-            new_end_node = Node(str(last_node_value + 1))
+            new_end_node = Node(str(last_node_value + 1))"""
             self.add_node(new_end_node)
             # Add edges from all end nodes to the new node with a weight of 0
             for end_node in end_nodes:
@@ -295,6 +297,7 @@ class Graph:
             print("Il y a un poids négatif")
             return
 
+        """
         # Get the successors of all nodes
         successors = {node.name: self.search_succ(node) for node in self.nodes}
         for node, succ in successors.items():
@@ -304,7 +307,7 @@ class Graph:
         predecessors = {node.name: self.search_pred(node) for node in self.nodes}
         print("\nPrédécesseurs de tous les nœuds :")
         for node, pred in predecessors.items():
-            print(f"{node} : {pred}")
+            print(f"{node} : {pred}")"""
 
         # Get all possible paths from the start node to the end node
         all_paths = self.get_path(start_node, end_node)
@@ -362,11 +365,11 @@ class Graph:
         free_margin = {node: earliest_start[node] - latest_start[node] for node in self.nodes}
 
         # Print margins
-        print("\Marge Totales:")
+        print("\nMarge Totales:")
         for node, margin in total_margin.items():
             print(f"Node {node.name}: {margin}")
 
-        print("\Marge libres:")
+        print("\nMarge libres:")
         for node, margin in free_margin.items():
             print(f"Node {node.name}: {margin}")
 
@@ -463,7 +466,8 @@ class Graph:
         for node in G.nodes():
             if node == '0':
                 node_colors.append('green')
-            elif node == str(self.get_end_node().name):
+            elif node == 'S':
+            # elif node == str(self.get_end_node().name):
                 node_colors.append('red')
             else:
                 node_colors.append('grey')
