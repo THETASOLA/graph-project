@@ -129,7 +129,7 @@ def traces_execution():
                     for neighbor, weight in node.neighbors.items():
                         f.write(f"{node.name} --> {neighbor} : {weight}\n")
 
-                f.write("----------- Etape 2 : Matrice des valeurs -----------\n")
+                f.write("\n----------- Etape 2 : Matrice des valeurs -----------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
                     graph.print_graph()
@@ -154,3 +154,19 @@ def traces_execution():
                     f.write(f"Il y a une seule sortie {end_node.name}, car il y a {len(graph.search_pred(end_node))} sorties initiales : {ends}\n")
                 else:
                     f.write(f"Il y a une seule sortie {end_node.name}\n")
+
+                f.write("\n----------- Etape 4 : Vérification des propriétés du graphe -----------\n")
+                if graph.is_cyclic():
+                    f.write("-> Le graphe est cyclique\n")
+                else:
+                    f.write("-> Le graphe n'est pas cyclique\n")
+
+                if graph.verif_poids():
+                    f.write("-> Il n'y a pas de poids négatif\n")
+                else:
+                    f.write("-> Il y a un poids négatif\n")
+
+                if not graph.is_cyclic() and graph.verif_poids():
+                    f.write("==> C’est donc un graphe d’ordonnancement")
+                else:
+                    f.write("==> N'est pas un graphe d’ordonnancement")
