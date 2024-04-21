@@ -25,7 +25,7 @@ while True:
     if choice == "1":
         graph.print_graph()
     elif choice == "2":
-        if graph.is_cyclic():
+        if graph.is_cyclic() == True:
             print("Le graphe est cyclique")
         else:
             print("Le graphe n'est pas cyclique")

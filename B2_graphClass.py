@@ -65,28 +65,32 @@ class Graph:
         if self.check_node(node1.name) and self.check_node(node2.name):
             node1.add_neighbor(node2, dist)
 
-    def is_cyclic(self):
+    def is_cyclic(self, cpt=0, done=None):
         """
         Check if the graph is cyclic
-        :return:
+        :param cpt: counter
+        :param done: list of nodes already visited
+        :return boolean: True if the graph is cyclic, False otherwise
         """
-        def dfs(start_node, visited, parent):
-            visited.add(start_node.name)
-            for neighbor in start_node.neighbors.keys():
-                neighbor = self.get_node_from_name(neighbor)
-                if neighbor.name not in visited:
-                    if dfs(neighbor, visited, start_node):
-                        return True
-                elif parent is not None and parent.name == neighbor.name:
-                    return True
+        if done is None:
+            done = []
+            cpt = 0
+        print(len(done), len(self.nodes), cpt)
+        if len(done) == len(self.nodes):
             return False
 
-        visited = set()
+        if cpt > len(self.nodes):
+            return True
+
+        done_temp = []
         for node in self.nodes:
-            if node.name not in visited:
-                if dfs(node, visited, None):
-                    return True
-        return False
+            if self.get_previous(node, done) == [] and node.name not in done:
+                done_temp.append(node.name)
+        for i in range(len(done_temp)):
+            done.append(done_temp[i])
+        return self.is_cyclic(cpt + 1, done)
+
+
 
 
     def verif_rank(self):
