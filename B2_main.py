@@ -25,15 +25,15 @@ while True:
     if choice == "1":
         graph.print_graph()
     elif choice == "2":
-        if graph.is_cyclic() == True:
-            print("Le graphe est cyclique")
+        if graph.is_cyclic():
+            print("\nLe graphe est cyclique")
         else:
-            print("Le graphe n'est pas cyclique")
+            print("\nLe graphe n'est pas cyclique")
     elif choice == "3":
         if graph.verif_poids():
-            print("Il n'y a pas de poids négatif")
+            print("\nIl n'y a pas de poids négatif")
         else:
-            print("Il y a un poids négatif")
+            print("\nIl y a un poids négatif")
     elif choice == "4":
         graph.display_paths(start_node, end_node)
     elif choice == "5":

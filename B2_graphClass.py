@@ -75,7 +75,6 @@ class Graph:
         if done is None:
             done = []
             cpt = 0
-        print(len(done), len(self.nodes), cpt)
         if len(done) == len(self.nodes):
             return False
 
