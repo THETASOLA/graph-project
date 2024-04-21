@@ -88,29 +88,16 @@ class Graph:
                     return True
         return False
 
-    def get_previous(self, node, done=None):
-        """
-        Get the previous nodes of a given node
-        :param node:
-        :param done:
-        :return:
-        """
-        if done is None:
-            done = []
-        previous = []
-        for n in self.nodes:
-            for neighbor in n.neighbors.keys():
-                neighbor = self.get_node_from_name(neighbor)
-                if neighbor.name == node.name and n.name not in done:
-                    previous.append(n)
-        return previous
 
-    def verif_rang(self):
+    def verif_rank(self):
         """
         Check if all nodes have a rank
         :return:
         """
-        return all(node.rank != -1 for node in self.nodes)
+        for node in self.nodes:
+            if node.rank == -1:
+                return False
+        return True
 
     def verif_poids(self):
         """
@@ -118,32 +105,54 @@ class Graph:
         :return Bolean value:
         """
         for node in self.nodes:
-            for value in node.neighbors.values():
-                if value < 0:
+            for values in node.neighbors.values():
+                if int(values) < 0:
+                    print(node.name, "a un poids négatif")
                     return False
         return True
 
-    def get_rank(self, start):
+    def get_previous(self, node, done=None):
         """
-        Assign ranks to all nodes
-        :param start:
+        Get the previous nodes of a given node
+        :param node:
+        :param done:
         :return:
         """
-        cpt_rank = 0
-        done = []
-        if self.check_node(start):
+        previous = []
+        for n in self.nodes:
+            for neighbor in n.neighbors.keys():
+                neighbor = self.get_node_from_name(neighbor)
+                if neighbor.name == node.name and n.name not in done:
+                    previous.append(n.name)
+        return previous
+
+
+    def get_rank(self, done=None, cpt_rank=0):
+        """
+        Assign ranks to all nodes if the graph is acyclic
+        :return:
+        """
+        if done is None:
+            done = []
+            cpt_rank = 0
+            if self.is_cyclic() == True:
+                print("\nImpossible de donner un rang à un graphe cyclique\n")
+                return None
+
+        if self.verif_rank() == True:
             for node in self.nodes:
-                if self.get_previous(node, done) == []:
-                    node.rank = cpt_rank
-                    cpt_rank += 1
-                    done.append(node.name)
-            if self.verif_rang():
-                print("\nRangs assigné avec succès\n")
-            else:
-                print("\nRangs non assigné avec succès\n")
-                for nodes in self.nodes:
-                    nodes.rank = -1
-        return None
+                print(node.name, ": les rangs", node.rank)
+            return None
+
+        done_temp = []
+        for node in self.nodes:
+            if self.get_previous(node, done) == [] and node.name not in done:
+                node.rank = cpt_rank
+                done_temp.append(node.name)
+        for i in range(len(done_temp)):
+            done.append(done_temp[i])
+        return self.get_rank(done, cpt_rank + 1)
+
 
     def get_start_node(self):
         """
@@ -270,6 +279,10 @@ class Graph:
         :param end_node:
         :return:
         """
+        if self.is_cyclic():
+            print("\nLe graphe est cyclique impossible")
+            return
+
         if not self.verif_poids():
             print("Il y a un poids négatif")
             return
