@@ -18,6 +18,9 @@ class Node:
 
     def __eq__(self, other):
         return self.name == other.name
+    
+    def __hash__(self):
+        return hash(self.name)
 
     def __str__(self):
         return f"Node_{self.name}"
@@ -320,6 +323,52 @@ class Graph:
         max_weight = max(path_weights)
         min_paths = [path for path in all_paths if path_weights[all_paths.index(path)] == min_weight]
         max_paths = [path for path in all_paths if path_weights[all_paths.index(path)] == max_weight]
+
+        # Calculate earliest start and finish times
+        earliest_start = {node: 0 for node in self.nodes}
+        earliest_finish = {node: 0 for node in self.nodes}
+        latest_start = {node: 0 for node in self.nodes}
+        latest_finish = {node: 0 for node in self.nodes}
+
+        # Initialize start node
+        earliest_start[start_node] = 0
+        earliest_finish[start_node] = 0
+        latest_start[start_node] = 0
+        latest_finish[start_node] = 0
+
+        # Calculate earliest start and finish times for other nodes
+        for node in self.nodes:
+            for neighbor in node.neighbors:
+                neighbor_node = self.get_node_from_name(neighbor)
+                earliest_start[neighbor_node] = max(earliest_start[neighbor_node], earliest_finish[node] + self.get_node_from_name(node.name).neighbors[neighbor])
+                if neighbor in neighbor_node.neighbors:  # Check if neighbor is in neighbor_node's neighbors
+                    earliest_finish[neighbor_node] = earliest_start[neighbor_node] + neighbor_node.neighbors[neighbor]
+                else:
+                    earliest_finish[neighbor_node] = earliest_start[neighbor_node]
+
+
+        # Calculate latest start and finish times
+        latest_finish[end_node] = earliest_finish[end_node]
+        latest_start[end_node] = earliest_start[end_node]
+
+        for node in reversed(self.nodes):
+            for neighbor in node.neighbors:
+                neighbor_node = self.get_node_from_name(neighbor)
+                latest_finish[node] = max(latest_finish[node], latest_start[neighbor_node] - self.get_node_from_name(node.name).neighbors[neighbor])
+                latest_start[node] = latest_finish[node] - self.get_node_from_name(node.name).neighbors[neighbor]
+
+        # Calculate total and free margins
+        total_margin = {node: latest_start[node] - earliest_start[node] for node in self.nodes}
+        free_margin = {node: earliest_start[node] - latest_start[node] for node in self.nodes}
+
+        # Print margins
+        print("\Marge Totales:")
+        for node, margin in total_margin.items():
+            print(f"Node {node.name}: {margin}")
+
+        print("\Marge libres:")
+        for node, margin in free_margin.items():
+            print(f"Node {node.name}: {margin}")
 
         # Display results
         print(f"\nLes chemins les plus courts sont de {min_weight} en passant par : ")
