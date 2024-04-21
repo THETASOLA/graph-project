@@ -151,6 +151,6 @@ def traces_execution():
                     # Get the list of all the final nodes
                     ends = str(list(graph.search_pred(end_node))).translate({ord(i): None for i in '[\']'})
                     # Write the result to the file
-                    f.write(f"Il y a une seule sortie {end_node.name}, car il y a {len(graph.search_pred(end_node))} sorties finales : {ends}\n")
+                    f.write(f"Il y a une seule sortie {end_node.name}, car il y a {len(graph.search_pred(end_node))} sorties initiales : {ends}\n")
                 else:
                     f.write(f"Il y a une seule sortie {end_node.name}\n")
