@@ -94,6 +94,9 @@ def traces_execution():
     # Check if the directory contain all the test files : to know if the file traces.txt already exists
     # path of the directory
     path = "B2_traces_execution"
+    # Check if the directory exists
+    if not os.path.exists(path):
+        os.makedirs(path)
     # Getting the list of directories
     dir_traces = os.listdir(path)
     # Checking if the list of directories contains all the test files
