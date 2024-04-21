@@ -166,16 +166,17 @@ class Graph:
         if len(start_nodes) == 1:
             return self.get_node_from_name(start_nodes[0])
         elif len(start_nodes) > 1:
-            # Create a new node 'E'
-            new_start_node = Node('E')
+            # Create a new node '0'
+            new_start_node = Node('0')
             self.add_node(new_start_node)
-            # Add edges from all start nodes to 'E' with a weight of 0
+            # Add edges from all start nodes to '0' with a weight of 0
             for start_node in start_nodes:
                 start_node_obj = self.get_node_from_name(start_node)
                 new_start_node.add_neighbor(start_node_obj, 0)
             return new_start_node
         else:
             raise ValueError("Il n'y a pas de nœud de départ dans le graphe.")
+
 
 
     def get_end_node(self):
@@ -187,17 +188,18 @@ class Graph:
         if len(end_nodes) == 1:
             return self.get_node_from_name(end_nodes[0])
         elif len(end_nodes) > 1:
-            # Create a new node 'S'
-            new_end_node = Node('S')
+            # Create a new node with value of last node + 1
+            last_node_value = max(map(int, end_nodes))
+            new_end_node = Node(str(last_node_value + 1))
             self.add_node(new_end_node)
-            # Add edges from 'S' to all end nodes with a weight of 0
+            # Add edges from all end nodes to the new node with a weight of 0
             for end_node in end_nodes:
                 end_node_obj = self.get_node_from_name(end_node)
                 end_node_obj.add_neighbor(new_end_node, 0)
             return new_end_node
         else:
             raise ValueError("Il n'y a pas de nœud d'arrivée dans le graphe.")
-
+        
     def search_pred(self, node):
         """
         Get the predecessors of a given node
@@ -292,7 +294,6 @@ class Graph:
 
         # Get the successors of all nodes
         successors = {node.name: self.search_succ(node) for node in self.nodes}
-        print("\nSuccesseurs de tous les nœuds :")
         for node, succ in successors.items():
             print(f"{node} : {succ}")
 
@@ -317,25 +318,28 @@ class Graph:
         # Find the shortest and longest paths
         min_weight = min(path_weights)
         max_weight = max(path_weights)
-        min_path = all_paths[path_weights.index(min_weight)]
-        max_path = all_paths[path_weights.index(max_weight)]
-
-        max_graph = Graph()
-        for node in max_path:
-            max_graph.add_node(node)
-        for i in range(len(max_path) - 1):
-            node1 = max_path[i]
-            node2 = max_path[i + 1]
-            max_graph.add_edge(node1, node2, self.get_node_from_name(node1.name).neighbors[node2.name])
+        min_paths = [path for path in all_paths if path_weights[all_paths.index(path)] == min_weight]
+        max_paths = [path for path in all_paths if path_weights[all_paths.index(path)] == max_weight]
 
         # Display results
-        print(
-            f"\nLe chemin le plus court est de {min_weight} en passant par : {' -> '.join([node.name for node in min_path])}")
-        print(
-            f"Le chemin le plus long est de {max_weight} en passant par : {' -> '.join([node.name for node in max_path])}")
+        print(f"\nLes chemins les plus courts sont de {min_weight} en passant par : ")
+        for i, min_path in enumerate(min_paths):
+            print(f"Chemin {i+1} : {' -> '.join([node.name for node in min_path])}")
 
-        # Draw the graph with only the nodes in max_path
-        self.draw_max_path(max_path)
+        print(f"Les chemins les plus longs de {max_weight} en passant par : ")
+
+        # Draw each max path
+        for i, max_path in enumerate(max_paths):
+            max_graph = Graph()
+            for node in max_path:
+                max_graph.add_node(node)
+            for i in range(len(max_path) - 1):
+                node1 = max_path[i]
+                node2 = max_path[i + 1]
+                max_graph.add_edge(node1, node2, self.get_node_from_name(node1.name).neighbors[node2.name])
+            print(f"Chemin : {' -> '.join([node.name for node in max_path])}")
+            self.draw_max_path(max_path)
+
 
     def draw_max_path(self, max_path):
         """
@@ -408,9 +412,9 @@ class Graph:
         node_colors = []
 
         for node in G.nodes():
-            if node == 'E':
+            if node == '0':
                 node_colors.append('green')
-            elif node == 'S':
+            elif node == str(self.get_end_node().name):
                 node_colors.append('red')
             else:
                 node_colors.append('grey')
