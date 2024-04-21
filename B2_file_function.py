@@ -116,12 +116,18 @@ def traces_execution():
                     f.write(f"Nombre de sommets : {len(nodes)}\n")
 
                 # Number of edges
-                f.write(f"Nombre d'arcs : {graph.number_of_edges()}\n")
+                f.write(f"Nombre d'arcs : {graph.number_of_edges()}\n\n")
 
                 # Description of the node neighbors and their weights
-                # Node --> sucessor : weight
+                f.write("Node --> successor : weight\n")
+                # If start_node is "E", write it to the file
+                if start_node.name == "E":
+                    for neighbor, weight in start_node.neighbors.items():
+                        f.write(f"{start_node.name} --> {neighbor} : {weight}\n")
 
-
+                for node in nodes.values():
+                    for neighbor, weight in node.neighbors.items():
+                        f.write(f"{node.name} --> {neighbor} : {weight}\n")
 
                 f.write("----------- Etape 2 : Matrice des valeurs -----------\n")
                 # Redirect the std output to the file
@@ -130,19 +136,21 @@ def traces_execution():
                     print("\n")
 
                 f.write("------------- Etape 3 -------------\n")
+                # Write the start and end node to the file
+                # If the start_node is "E"
+                if start_node.name == "E":
+                    # Get the list of all the initiales nodes
+                    starts = str(list(start_node.neighbors.keys())).translate({ord(i): None for i in '[\']'})
+                    # Write the result to the file
+                    f.write(f"Il y a une seule entrée {start_node.name}, car il y a {len(start_node.neighbors.keys())} entrées initiales : {starts}\n")
+                else:
+                    f.write(f"Il y a une seule entrée {start_node.name}\n")
 
-                """f.write("Affichage du graphe\n")
-                f.write(str(graph.print_graph()) + "\n\n")
-
-                f.write("Vérification si le graphe est cyclique\n")
-                f.write(str(graph.is_cyclic()) + "\n\n")
-
-                f.write("Vérification si le graphe contient des poids négatifs\n")
-                f.write(str(graph.verif_poids()) + "\n\n")
-
-                f.write("Affichage des chemins de E à S\n")
-                f.write(str(graph.display_paths(start_node, end_node)) + "\n\n")
-
-                f.write("Dessin du graphe\n")
-                f.write(str(graph.draw()) + "\n\n")
-                """
+                # If the end_node is "S"
+                if end_node.name == "S":
+                    # Get the list of all the final nodes
+                    ends = str(list(graph.search_pred(end_node))).translate({ord(i): None for i in '[\']'})
+                    # Write the result to the file
+                    f.write(f"Il y a une seule sortie {end_node.name}, car il y a {len(graph.search_pred(end_node))} sorties finales : {ends}\n")
+                else:
+                    f.write(f"Il y a une seule sortie {end_node.name}\n")
