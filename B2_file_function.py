@@ -108,9 +108,10 @@ def traces_execution():
             with open("B2_traces_execution/trace_graph_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture de la table de contrainte et création des nœuds -----------\n")
                 # Number of nodes
-                if start_node.name == "0" and end_node.name == "S":
+                highest_node_value = max(map(int, (node.name for node in graph.nodes)))
+                if start_node.name == "0" and end_node.name == str(highest_node_value):
                     f.write(f"Nombre de sommets : {len(nodes) + 2}\n")
-                elif start_node.name == "0" or end_node.name == "S":
+                elif start_node.name == "0" or end_node.name == str(highest_node_value):
                     f.write(f"Nombre de sommets : {len(nodes) + 1}\n")
                 else:
                     f.write(f"Nombre de sommets : {len(nodes)}\n")
@@ -146,8 +147,8 @@ def traces_execution():
                 else:
                     f.write(f"Il y a une seule entrée {start_node.name}\n")
 
-                # If the end_node is "S"
-                if end_node.name == "S":
+                # If the end_node is the highest node value + 1
+                if end_node.name == str(highest_node_value):
                     # Get the list of all the final nodes
                     ends = str(list(graph.search_pred(end_node))).translate({ord(i): None for i in '[\']'})
                     # Write the result to the file

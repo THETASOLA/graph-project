@@ -16,17 +16,17 @@ Node --> successor : weight
 6 --> 13 : 5
 7 --> 8 : 9
 8 --> 9 : 2
-9 --> S : 0
-10 --> S : 0
+9 --> 14 : 0
+10 --> 14 : 0
 11 --> 10 : 1
 12 --> 13 : 1
 13 --> 4 : 9
 
 ----------- Etape 2 : Matrice des valeurs -----------
 
-Votre graphe 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, S a bien été pris en compte
+Votre graphe 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 14 a bien été pris en compte
 
- 	1	2	3	4	5	6	7	8	9	10	11	12	13	0	S	
+ 	1	2	3	4	5	6	7	8	9	10	11	12	13	0	14	
 1	*	*	2	*	*	*	*	*	*	*	*	*	*	*	*	
 2	*	*	*	5	*	*	*	*	*	*	*	*	*	*	*	
 3	*	*	*	4	*	*	*	*	*	*	*	4	*	*	*	
@@ -41,12 +41,12 @@ Votre graphe 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, S a bien été pris e
 12	*	*	*	*	*	*	*	*	*	*	*	*	1	*	*	
 13	*	*	*	9	*	*	*	*	*	*	*	*	*	*	*	
 0	0	0	*	*	*	*	*	*	*	*	*	*	*	*	*	
-S	*	*	*	*	*	*	*	*	*	*	*	*	*	*	*	
+14	*	*	*	*	*	*	*	*	*	*	*	*	*	*	*	
 
 
 ------------- Etape 3 : Etat des entrées/sorties et ordonnancement -------------
 Il y a une seule entrée 0, car il y a 2 entrées initiales : 1, 2
-Il y a une seule sortie S, car il y a 2 sorties initiales : 9, 10
+Il y a une seule sortie 14, car il y a 2 sorties initiales : 9, 10
 
 ----------- Etape 4 : Vérification des propriétés du graphe -----------
 -> Le graphe est cyclique

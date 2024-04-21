@@ -192,10 +192,10 @@ class Graph:
             return self.get_node_from_name(end_nodes[0])
         elif len(end_nodes) > 1:
             # Create a new node 'S'
-            new_end_node = Node('S')
-            """# Create a new node with value of last node + 1
-            last_node_value = max(map(int, end_nodes))
-            new_end_node = Node(str(last_node_value + 1))"""
+            #new_end_node = Node('S')
+            # Create a new node with value of last node + 1
+            last_node_value = max(map(int, (node.name for node in self.nodes)))
+            new_end_node = Node(str(last_node_value + 1))
             self.add_node(new_end_node)
             # Add edges from all end nodes to the new node with a weight of 0
             for end_node in end_nodes:
@@ -464,10 +464,11 @@ class Graph:
         node_colors = []
 
         for node in G.nodes():
-            if node == '0':
+            #if node == '0':
+            if node == str(self.get_start_node().name):
                 node_colors.append('green')
-            elif node == 'S':
-            # elif node == str(self.get_end_node().name):
+            #elif node == 'S':
+            elif node == str(self.get_end_node().name):
                 node_colors.append('red')
             else:
                 node_colors.append('grey')
