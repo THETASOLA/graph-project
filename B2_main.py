@@ -15,9 +15,9 @@ while True:
     print("2. Vérifier si le graphe est cyclique")
     print("3. Vérifier si le graphe contient des poids négatifs")
     print(f"4. Afficher les chemins de {start_node.name} à {end_node.name}")
-    print("5. Dessiner le graphe")
-    print("6. Changer de table de contrainte")
-    print("7. Obtenir les rangs des sommets")
+    print("5. Obtenir les rangs des sommets")
+    print("6. Dessiner le graphe")
+    print("7. Changer de table de contrainte")
     print("8. Quitter")
 
     choice = input("Entrez le numéro de l'option choisie : ")
@@ -37,14 +37,15 @@ while True:
     elif choice == "4":
         graph.display_paths(start_node, end_node)
     elif choice == "5":
-        graph.draw()
+        print("\n", end="")
+        graph.get_rank()
     elif choice == "6":
+        graph.draw()
+    elif choice == "7":
         os.system('cls')
         num_file = input_file()
         nodes, graph, start_node, end_node = graph_initialization(num_file)
-    elif choice == "7":
-        print("\n", end="")
-        graph.get_rank()
+
     elif choice == "8":
         break
     else:
