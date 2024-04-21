@@ -344,13 +344,11 @@ class Graph:
             for neighbor in node.neighbors.keys():
                 neighbor = self.get_node_from_name(neighbor)
                 G.add_edge(node.name, neighbor.name, weight=node.neighbors[neighbor.name])
-
-        pos = nx.spring_layout(G)
+        
+        pos = nx.shell_layout(G)
 
         # Définir les couleurs des nœuds
         node_colors = []
-        first_node = self.nodes[0].name
-        last_node = self.nodes[-1].name
 
         for node in G.nodes():
             if node == 'E':
@@ -358,7 +356,7 @@ class Graph:
             elif node == 'S':
                 node_colors.append('red')
             else:
-                node_colors.append('white')
+                node_colors.append('grey')
 
         # Dessiner les nœuds avec les couleurs définies
         nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=500)
