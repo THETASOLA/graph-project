@@ -169,4 +169,4 @@ def traces_execution():
                 if not graph.is_cyclic() and graph.verif_poids():
                     f.write("==> C’est donc un graphe d’ordonnancement")
                 else:
-                    f.write("==> N'est pas un graphe d’ordonnancement")
+                    f.write("==> Ce n'est pas un graphe d’ordonnancement")

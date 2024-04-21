@@ -144,7 +144,7 @@ class Graph:
 
         if self.verif_rank() == True:
             for node in self.nodes:
-                print(node.name, ": les rangs", node.rank)
+                print(f"Le noeud {node.name}, a un rang de {node.rank}")
             return None
 
         done_temp = []

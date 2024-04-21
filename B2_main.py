@@ -43,6 +43,7 @@ while True:
         num_file = input_file()
         nodes, graph, start_node, end_node = graph_initialization(num_file)
     elif choice == "7":
+        print("\n")
         graph.get_rank()
     elif choice == "8":
         break
