@@ -35,7 +35,10 @@ while True:
         else:
             print("\nIl y a un poids négatif")
     elif choice == "4":
-        graph.display_paths(start_node, end_node)
+            task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates = graph.get_task_ranks()
+            if task_ranks is not None:
+                # Afficher le tableau
+                graph.print_simplified_table(task_ranks, tasks, task_earliest_dates)
     elif choice == "5":
         print("\n", end="")
         graph.get_rank()

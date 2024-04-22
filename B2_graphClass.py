@@ -92,9 +92,6 @@ class Graph:
             done.append(done_temp[i])
         return self.is_cyclic(cpt + 1, done)
 
-
-
-
     def verif_rank(self):
         """
         Check if all nodes have a rank
@@ -132,7 +129,6 @@ class Graph:
                     previous.append(n.name)
         return previous
 
-
     def get_rank(self, done=None, cpt_rank=0):
         """
         Assign ranks to all nodes if the graph is acyclic
@@ -159,7 +155,6 @@ class Graph:
             done.append(done_temp[i])
         return self.get_rank(done, cpt_rank + 1)
 
-
     def get_start_node(self):
         """
         Get the start nodes of the graph
@@ -179,8 +174,6 @@ class Graph:
             return new_start_node
         else:
             raise ValueError("Il n'y a pas de nœud de départ dans le graphe.")
-
-
 
     def get_end_node(self):
         """
@@ -248,151 +241,183 @@ class Graph:
                 nodes_without_predecessors.append(node.name)
         return nodes_without_predecessors
 
-    def get_total_weight(self, path):
-        """
-        Get the total weight of a path
-        :param path:
-        :return total_weight: return the total weight of the path
-        """
-        total_weight = 0
-        for i in range(len(path) - 1):
-            node1 = path[i]
-            node2 = path[i + 1]
-            total_weight += node1.neighbors[node2.name]
-        return total_weight
-
     def get_path(self, start_node, end_node):
-        """
-        Get all possible paths from a start node to an end node
-        :param start_node:
-        :param end_node:
-        :return paths: return all possible paths from start_node to end_node
-        """
+        # Vérifier que les nœuds de départ et d'arrivée existent dans le graphe
+        if not self.check_node(start_node.name) or not self.check_node(end_node.name):
+            print("Erreur : le nœud de départ ou le nœud d'arrivée n'existe pas dans le graphe")
+            return None
+
+        # Cas de base : si le nœud de départ est le même que le nœud d'arrivée, renvoyer un chemin avec un seul nœud
+        if start_node.name == end_node.name:
+            return [[start_node.name]]
+
+        # Récupérer la liste des prédécesseurs du nœud d'arrivée
+        predecessors = self.search_pred(end_node)
+
+        # Initialiser une liste vide pour stocker tous les chemins possibles
         paths = []
-        stack = [(start_node, [start_node])]
-        while stack:
-            current_node, path = stack.pop()
-            if current_node == end_node:
-                paths.append(path)
-            else:
-                for neighbor in current_node.neighbors:
-                    neighbor_node = self.get_node_from_name(neighbor)
-                    if neighbor_node not in path:
-                        new_path = path + [neighbor_node]
-                        stack.append((neighbor_node, new_path))
+
+        # Parcourir tous les prédécesseurs du nœud d'arrivée
+        for predecessor in predecessors:
+            # Récupérer le nœud prédécesseur
+            pred_node = self.get_node_from_name(predecessor)
+
+            # Récupérer la liste des chemins du nœud de départ au nœud prédécesseur
+            pred_paths = self.get_path(start_node, pred_node)
+
+            # Ajouter le nœud d'arrivée à chaque chemin du nœud prédécesseur
+            for path in pred_paths:
+                new_path = path + [end_node.name]
+                paths.append(new_path)
+
+        # Retourner la liste de tous les chemins possibles
         return paths
+    
+    def get_path_weight(self, path):
+        # Vérifier que le chemin n'est pas vide
+        if not path:
+            print("Erreur : le chemin est vide")
+            return None
 
-    def display_paths(self, start_node, end_node):
-        """
-        Display all possible paths from a start node to an end node
-        :param start_node:
-        :param end_node:
-        :return:
-        """
+        # Initialiser le poids total à 0
+        total_weight = 0
+
+        # Parcourir le chemin et ajouter les poids des arêtes entre chaque paire de nœuds consécutifs
+        for i in range(len(path) - 1):
+            current_node = self.get_node_from_name(path[i])
+            next_node = self.get_node_from_name(path[i + 1])
+            total_weight += current_node.neighbors[next_node.name]
+
+        # Retourner le poids total du chemin
+        return total_weight
+     
+    def get_task_ranks(self):
+        start_node = self.get_start_node()
+        # Vérifier que le graphe n'est pas cyclique
         if self.is_cyclic():
-            print("\nLe graphe est cyclique impossible")
+            print("Erreur : le graphe est cyclique")
+            return None, None, None, None, None, None, None
+
+        # Créer une liste vide pour stocker les rangs des tâches
+        task_ranks = []
+
+        # Créer une liste vide pour stocker les prédécesseurs de chaque tâche
+        task_predecessors = []
+
+        # Créer une liste vide pour stocker les successeurs de chaque tâche
+        task_successors = []
+
+        # Créer une liste vide pour stocker les chemins de chaque tâche
+        task_paths = []
+
+        # Créer une liste vide pour stocker les poids totaux des chemins de chaque tâche
+        task_path_weights = []
+
+        # Créer une liste vide pour stocker les dates au plus tôt de chaque tâche
+        task_earliest_dates = []
+
+        # Trier les nœuds du graphe par ordre croissant de rang
+        sorted_nodes = sorted(self.nodes, key=lambda x: x.rank)
+
+        # Parcourir la liste triée des nœuds et ajouter leur rang et leur nom à la liste des rangs des tâches
+        for node in sorted_nodes:
+            task_ranks.append(f"{node.rank}({node.name})")
+
+            # Récupérer la liste des prédécesseurs de la tâche
+            predecessors = self.search_pred(node)
+
+            # Ajouter la liste des prédécesseurs à la liste des prédécesseurs de chaque tâche
+            task_predecessors.append(predecessors)
+
+            # Récupérer la liste des successeurs de la tâche
+            successors = self.search_succ(node)
+
+            # Ajouter la liste des successeurs à la liste des successeurs de chaque tâche
+            task_successors.append(successors)
+
+            # Récupérer tous les chemins du nœud de départ au nœud courant
+            paths = self.get_path(start_node, node)
+
+            # Ajouter la liste des chemins à la liste des chemins de chaque tâche
+            task_paths.append(paths)
+
+            # Calculer les poids totaux des chemins
+            path_weights = []
+            for path in paths:
+                # Calculer le poids total du chemin
+                path_weight = self.get_path_weight(path)
+
+                # Ajouter le poids total du chemin à la liste des poids totaux des chemins de la tâche
+                path_weights.append(path_weight)
+
+            # Ajouter la liste des poids totaux des chemins à la liste des poids totaux des chemins de chaque tâche
+            task_path_weights.append(path_weights)
+
+            # Calculer la date au plus tôt pour la tâche
+            earliest_date = max(path_weights)
+
+            # Ajouter la date au plus tôt à la liste des dates au plus tôt de chaque tâche
+            task_earliest_dates.append(earliest_date)
+
+        # Créer une liste vide pour stocker les tâches et leurs longueurs associées
+        tasks = []
+
+        # Parcourir la liste triée des nœuds et ajouter leur nom et leur longueur à la liste des tâches et leurs longueurs associées
+        for node in sorted_nodes:
+            # Vérifier que le nœud a au moins un voisin entrant
+            if node.neighbors:
+                # Récupérer le poids de l'arête entrante
+                incoming_edge = next(iter(node.neighbors.items()))
+                incoming_weight = incoming_edge[1]
+
+                # Ajouter le nom de la tâche et sa longueur à la liste des tâches et leurs longueurs associées
+                tasks.append(f"{node.name}({incoming_weight})")
+            else:
+                # Ajouter le nom de la tâche avec une longueur de 0 à la liste des tâches et leurs longueurs associées
+                tasks.append(f"{node.name}(0)")
+
+        # Trouver la longueur maximale des dates au plus tôt
+        max_earliest_date = max(task_earliest_dates)
+
+        # Trouver le chemin correspondant à la date au plus tôt maximale
+        max_earliest_date_index = task_earliest_dates.index(max_earliest_date)
+        max_path = task_paths[max_earliest_date_index]
+        max_path_str = '->'.join(str(node) for node in max_path)
+
+        # Afficher le chemin le plus long et sa longueur
+        print(f"\nLe chemin le plus long est de {max_earliest_date} en passant par {max_path_str}")
+
+        # Retourner les listes des rangs des tâches, des tâches et leurs longueurs associées, des prédécesseurs et des successeurs de chaque tâche, des chemins et des poids totaux des chemins de chaque tâche, et des dates au plus tôt de chaque tâche
+        return task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates
+    
+    def print_table(self, task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates):
+            # Vérifier que les sept listes ont la même longueur
+            if len(task_ranks) != len(tasks) or len(tasks) != len(task_predecessors) or len(task_predecessors) != len(task_successors) or len(task_successors) != len(task_paths) or len(task_paths) != len(task_path_weights) or len(task_path_weights) != len(task_earliest_dates):
+                print("Erreur : les listes des rangs des tâches, des tâches et leurs longueurs associées, des prédécesseurs et des successeurs de chaque tâche, des chemins et des poids totaux des chemins de chaque tâche, et des dates au plus tôt de chaque tâche n'ont pas la même longueur")
+                return
+
+            # Imprimer l'en-tête du tableau
+            print("Rang\tTâche et sa longueur\tPrédécesseurs\tSuccesseurs\tChemins\tPoids totaux des chemins\tDate au plus tôt")
+
+            # Parcourir les listes des rangs des tâches, des tâches et leurs longueurs associées, des prédécesseurs et des successeurs de chaque tâche, des chemins et des poids totaux des chemins de chaque tâche, et des dates au plus tôt de chaque tâche
+            for rank, task, predecessors, successors, paths, path_weights, earliest_date in zip(task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates):
+                # Imprimer le rang, la tâche et sa longueur associée, la liste des prédécesseurs, la liste des successeurs, la liste des chemins, la liste des poids totaux des chemins et la date au plus tôt de la tâche
+                print(rank, "\t", task, "\t\t", predecessors, "\t\t", successors, "\t\t", paths, "\t\t", path_weights, "\t\t", earliest_date)
+
+    def print_simplified_table(self, task_ranks, tasks, task_earliest_dates):
+        # Vérifier que les trois listes ont la même longueur
+        if len(task_ranks) != len(tasks) or len(tasks) != len(task_earliest_dates):
+            print("Erreur : les listes des rangs des tâches, des tâches et leurs longueurs associées, et des dates au plus tôt de chaque tâche n'ont pas la même longueur")
             return
 
-        if not self.verif_poids():
-            print("Il y a un poids négatif")
-            return
+        # Imprimer l'en-tête du tableau
+        print("Rang\tTâche\tDate au plus tôt")
 
-        """
-        # Get the successors of all nodes
-        successors = {node.name: self.search_succ(node) for node in self.nodes}
-        for node, succ in successors.items():
-            print(f"{node} : {succ}")
-
-        # Get the predecessors of all nodes
-        predecessors = {node.name: self.search_pred(node) for node in self.nodes}
-        print("\nPrédécesseurs de tous les nœuds :")
-        for node, pred in predecessors.items():
-            print(f"{node} : {pred}")"""
-
-        # Get all possible paths from the start node to the end node
-        all_paths = self.get_path(start_node, end_node)
-
-        # Get the total weight of each possible path from start_node to end_node
-        path_weights = [self.get_total_weight(path) for path in all_paths]
-
-        # Display information in tabular form in the console
-        print(
-            f"\nInformations sur tous les chemins possibles pour aller du nœud {start_node.name} au nœud {end_node.name} :")
-        for path, weight in zip(all_paths, path_weights):
-            print(f"Chemin : {[node.name for node in path]}, Poids total : {weight}")
-
-        # Find the shortest and longest paths
-        min_weight = min(path_weights)
-        max_weight = max(path_weights)
-        min_paths = [path for path in all_paths if path_weights[all_paths.index(path)] == min_weight]
-        max_paths = [path for path in all_paths if path_weights[all_paths.index(path)] == max_weight]
-
-        # Calculate earliest start and finish times
-        earliest_start = {node: 0 for node in self.nodes}
-        earliest_finish = {node: 0 for node in self.nodes}
-        latest_start = {node: 0 for node in self.nodes}
-        latest_finish = {node: 0 for node in self.nodes}
-
-        # Initialize start node
-        earliest_start[start_node] = 0
-        earliest_finish[start_node] = 0
-        latest_start[start_node] = 0
-        latest_finish[start_node] = 0
-
-        # Calculate earliest start and finish times for other nodes
-        for node in self.nodes:
-            for neighbor in node.neighbors:
-                neighbor_node = self.get_node_from_name(neighbor)
-                earliest_start[neighbor_node] = max(earliest_start[neighbor_node], earliest_finish[node] + self.get_node_from_name(node.name).neighbors[neighbor])
-                if neighbor in neighbor_node.neighbors:  # Check if neighbor is in neighbor_node's neighbors
-                    earliest_finish[neighbor_node] = earliest_start[neighbor_node] + neighbor_node.neighbors[neighbor]
-                else:
-                    earliest_finish[neighbor_node] = earliest_start[neighbor_node]
-
-
-        # Calculate latest start and finish times
-        latest_finish[end_node] = earliest_finish[end_node]
-        latest_start[end_node] = earliest_start[end_node]
-
-        for node in reversed(self.nodes):
-            for neighbor in node.neighbors:
-                neighbor_node = self.get_node_from_name(neighbor)
-                latest_finish[node] = max(latest_finish[node], latest_start[neighbor_node] - self.get_node_from_name(node.name).neighbors[neighbor])
-                latest_start[node] = latest_finish[node] - self.get_node_from_name(node.name).neighbors[neighbor]
-
-        # Calculate total and free margins
-        total_margin = {node: latest_start[node] - earliest_start[node] for node in self.nodes}
-        free_margin = {node: earliest_start[node] - latest_start[node] for node in self.nodes}
-
-        # Print margins
-        print("\nMarge Totales:")
-        for node, margin in total_margin.items():
-            print(f"Node {node.name}: {margin}")
-
-        print("\nMarge libres:")
-        for node, margin in free_margin.items():
-            print(f"Node {node.name}: {margin}")
-
-        # Display results
-        print(f"\nLes chemins les plus courts sont de {min_weight} en passant par : ")
-        for i, min_path in enumerate(min_paths):
-            print(f"Chemin {i+1} : {' -> '.join([node.name for node in min_path])}")
-
-        print(f"Les chemins les plus longs de {max_weight} en passant par : ")
-
-        # Draw each max path
-        for i, max_path in enumerate(max_paths):
-            max_graph = Graph()
-            for node in max_path:
-                max_graph.add_node(node)
-            for i in range(len(max_path) - 1):
-                node1 = max_path[i]
-                node2 = max_path[i + 1]
-                max_graph.add_edge(node1, node2, self.get_node_from_name(node1.name).neighbors[node2.name])
-            print(f"Chemin : {' -> '.join([node.name for node in max_path])}")
-            self.draw_max_path(max_path)
-
-
+        # Parcourir les listes des rangs des tâches, des tâches et leurs longueurs associées, et des dates au plus tôt de chaque tâche
+        for rank, task, earliest_date in zip(task_ranks, tasks, task_earliest_dates):
+            # Imprimer le rang, la tâche et la date au plus tôt de la tâche
+            print(rank, "\t", task, "\t", earliest_date)
+    
     def draw_max_path(self, max_path):
         """
         Draw the graph with only the nodes and edges in the max path
