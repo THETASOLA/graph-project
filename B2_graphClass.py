@@ -291,12 +291,26 @@ class Graph:
         # Retourner le poids total du chemin
         return total_weight
      
-    def get_task_ranks(self):
+    def get_edge_weight(self, node_name, successor_name):
+        """
+        Get the weight of the edge between a node and a specific successor in the graph
+        :param node_name: Name of the node
+        :param successor_name: Name of the successor node
+        :return weight: Weight of the edge between the node and the specified successor
+        """
+        node = self.get_node_from_name(node_name)
+        if node:
+            if successor_name in node.neighbors:
+                return node.neighbors[successor_name]
+            else:
+                print(f"Error: Successor {successor_name} not found for node {node_name}")
+                return None
+        else:
+            print(f"Error: Node {node_name} not found in the graph")
+            return None
+        
+    def earliest_dates(self):
         start_node = self.get_start_node()
-        # Vérifier que le graphe n'est pas cyclique
-        if self.is_cyclic():
-            print("Erreur : le graphe est cyclique")
-            return None, None, None, None, None, None, None
 
         # Créer une liste vide pour stocker les rangs des tâches
         task_ranks = []
@@ -379,45 +393,78 @@ class Graph:
         # Trouver la longueur maximale des dates au plus tôt
         max_earliest_date = max(task_earliest_dates)
 
-        # Trouver le chemin correspondant à la date au plus tôt maximale
-        max_earliest_date_index = task_earliest_dates.index(max_earliest_date)
-        max_path = task_paths[max_earliest_date_index]
-        max_path_str = '->'.join(str(node) for node in max_path)
-
-        # Afficher le chemin le plus long et sa longueur
-        print(f"\nLe chemin le plus long est de {max_earliest_date} en passant par {max_path_str}")
-
         # Retourner les listes des rangs des tâches, des tâches et leurs longueurs associées, des prédécesseurs et des successeurs de chaque tâche, des chemins et des poids totaux des chemins de chaque tâche, et des dates au plus tôt de chaque tâche
-        return task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates
+        return task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates, max_earliest_date
     
-    def print_table(self, task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates):
-            # Vérifier que les sept listes ont la même longueur
-            if len(task_ranks) != len(tasks) or len(tasks) != len(task_predecessors) or len(task_predecessors) != len(task_successors) or len(task_successors) != len(task_paths) or len(task_paths) != len(task_path_weights) or len(task_path_weights) != len(task_earliest_dates):
-                print("Erreur : les listes des rangs des tâches, des tâches et leurs longueurs associées, des prédécesseurs et des successeurs de chaque tâche, des chemins et des poids totaux des chemins de chaque tâche, et des dates au plus tôt de chaque tâche n'ont pas la même longueur")
-                return
+    def latest_date(self, max_earliest_date):
+        # Ensuring all nodes have ranks
+        if not self.verif_rank():
+            self.get_rank()
 
-            # Imprimer l'en-tête du tableau
-            print("Rang\tTâche et sa longueur\tPrédécesseurs\tSuccesseurs\tChemins\tPoids totaux des chemins\tDate au plus tôt")
+        # Sorting nodes by their rank in descending order
+        sorted_nodes = sorted(self.nodes, key=lambda x: x.rank, reverse=True)
 
-            # Parcourir les listes des rangs des tâches, des tâches et leurs longueurs associées, des prédécesseurs et des successeurs de chaque tâche, des chemins et des poids totaux des chemins de chaque tâche, et des dates au plus tôt de chaque tâche
-            for rank, task, predecessors, successors, paths, path_weights, earliest_date in zip(task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates):
-                # Imprimer le rang, la tâche et sa longueur associée, la liste des prédécesseurs, la liste des successeurs, la liste des chemins, la liste des poids totaux des chemins et la date au plus tôt de la tâche
-                print(rank, "\t", task, "\t\t", predecessors, "\t\t", successors, "\t\t", paths, "\t\t", path_weights, "\t\t", earliest_date)
+        # Initialization
+        task_ranks = [f"{node.rank}({node.name})" for node in sorted_nodes]
+        tasks = [f"{node.name}(0)" for node in sorted_nodes]  # Initialize tasks with weight 0
+        task_successors = [self.search_succ(node) for node in sorted_nodes]
+        task_weights = [sum(node.neighbors.values()) for node in sorted_nodes]  # Initialize weights with sum of outgoing weights
 
-    def print_simplified_table(self, task_ranks, tasks, task_earliest_dates):
-        # Vérifier que les trois listes ont la même longueur
-        if len(task_ranks) != len(tasks) or len(tasks) != len(task_earliest_dates):
-            print("Erreur : les listes des rangs des tâches, des tâches et leurs longueurs associées, et des dates au plus tôt de chaque tâche n'ont pas la même longueur")
-            return
+        # Initialize task_latest_dates with None
+        task_latest_dates = [None] * len(sorted_nodes)
+        task_latest_dates[0] = max_earliest_date  # Set the latest date of the last task
 
-        # Imprimer l'en-tête du tableau
-        print("Rang\tTâche\tDate au plus tôt")
+        # Iterate over nodes and update task_latest_dates
+        for i in range(1, len(sorted_nodes)):
+            successors_latest_dates = []  # List to store the latest dates of all successors
+            for succ_name in task_successors[i]:
+                weight = self.get_edge_weight(sorted_nodes[i].name, succ_name)
+                if weight is not None:
+                    succ_index = [node.name for node in sorted_nodes].index(succ_name)
+                    if task_latest_dates[succ_index] is not None:
+                        successors_latest_dates.append(task_latest_dates[succ_index] - weight)
+                    else:
+                        print(f"Error: Latest date for successor {succ_name} not found")
+            if successors_latest_dates:  # If there are successors with latest dates
+                task_latest_dates[i] = min(successors_latest_dates)
+            else:
+                task_latest_dates[i] = task_latest_dates[i-1] - task_weights[i]
 
-        # Parcourir les listes des rangs des tâches, des tâches et leurs longueurs associées, et des dates au plus tôt de chaque tâche
-        for rank, task, earliest_date in zip(task_ranks, tasks, task_earliest_dates):
-            # Imprimer le rang, la tâche et la date au plus tôt de la tâche
-            print(rank, "\t", task, "\t", earliest_date)
-    
+        return task_ranks, tasks, task_successors, task_weights, task_latest_dates
+
+    def date_table(self, task_ranks_earliest, task_earliest_dates, task_ranks_latest, task_latest_dates):
+        earliest_tab = list(zip(task_ranks_earliest, task_earliest_dates))
+        latest_tab = list(zip(task_ranks_latest, task_latest_dates))
+        # Create a dictionary to store the data from earliest_tab and latest_tab
+        data_dict = {}
+        
+        # Populate the dictionary with data from earliest_tab
+        for rank, date in earliest_tab:
+            data_dict[rank] = {'earliest_date': date}
+        
+        # Update the dictionary with data from latest_tab
+        for rank, date in latest_tab:
+            if rank in data_dict:
+                data_dict[rank]['latest_date'] = date
+        
+        # Create a list to store the final merged data
+        final = []
+        
+        # Iterate through task_ranks_earliest and populate the final list with merged data
+        for rank in task_ranks_earliest:
+            if rank in data_dict:
+                earliest_date = data_dict[rank]['earliest_date']
+                latest_date = data_dict[rank].get('latest_date', None)
+                difference = latest_date - earliest_date if latest_date is not None else None
+                final.append((rank, earliest_date, latest_date, difference))
+        
+        # Print and return the final table
+        print("\nTableau final combinant les données calculées :")
+        print("{:<10} {:<20} {:<20} {:<20}".format("Rang", "Date au plus tôt", "Date au plus tard", "Marge totale"))
+        for row in final:
+            rank, earliest_date, latest_date, difference = row
+            print("{:<10} {:<20} {:<20} {:<20}".format(rank, earliest_date, latest_date, difference))
+          
     def draw_max_path(self, max_path):
         """
         Draw the graph with only the nodes and edges in the max path

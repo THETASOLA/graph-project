@@ -34,11 +34,21 @@ while True:
             print("\nIl n'y a pas de poids négatif")
         else:
             print("\nIl y a un poids négatif")
+
     elif choice == "4":
-            task_ranks, tasks, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates = graph.get_task_ranks()
-            if task_ranks is not None:
-                # Afficher le tableau
-                graph.print_simplified_table(task_ranks, tasks, task_earliest_dates)
+        #graph.display_paths(start_node, end_node)
+
+        if graph.is_cyclic():
+            print("\nLe graphe est cyclique impossible !")
+        else : 
+            if not graph.verif_rank():
+                graph.get_rank()
+             #graph.display_paths(start_node, end_node)
+            task_ranks_earliest, tasks_earliest, task_predecessors, task_successors, task_paths, task_path_weights, task_earliest_dates, max_earliest_date = graph.earliest_dates()
+            task_ranks_latest, tasks_latest, task_successors, task_weights, task_latest_dates = graph.latest_date(max_earliest_date)
+            graph.date_table(task_ranks_earliest, task_earliest_dates, task_ranks_latest, task_latest_dates)
+            
+        
     elif choice == "5":
         print("\n", end="")
         graph.get_rank()
