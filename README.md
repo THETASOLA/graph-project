@@ -10,7 +10,7 @@ Le nœud d'entrée est en vert et celui de sortie en rouge.\
 S'il y a plusieurs entrées initiales, un nœud égal à 0 est créé.\
 En cas de multiples nœuds de sortie, une sortie unique est créée : le nœud N+1 où N est le nombre initial de nœud.
 
-![Représentation_graphe](./image/graphe_exemple_7.png)
+![Représentation_graphe](image/Graphe_exemple_7.png)
 
 # Auteurs
 
