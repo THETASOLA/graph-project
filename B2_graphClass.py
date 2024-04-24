@@ -363,7 +363,7 @@ class Graph:
         # Calculate total and free margins
         total_margin = {node: latest_start[node] - earliest_start[node] for node in self.nodes}
         free_margin = {node: earliest_start[node] - latest_start[node] for node in self.nodes}
-
+        """
         # Print margins
         print("\nMarge Totales:")
         for node, margin in total_margin.items():
@@ -372,7 +372,7 @@ class Graph:
         print("\nMarge libres:")
         for node, margin in free_margin.items():
             print(f"Node {node.name}: {margin}")
-
+        """
         # Display results
         print(f"\nLes chemins les plus courts sont de {min_weight} en passant par : ")
         for i, min_path in enumerate(min_paths):
